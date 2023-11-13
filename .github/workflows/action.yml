@@ -18,16 +18,16 @@ jobs:
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git remote add upstream ${REPO_FORK}
           git fetch upstream
-          echo "DIFF_FOUND=$(git log origin/main..upstream/main)" >> "$GITHUB_ENV"
+          diff_output=$(git log origin/main..upstream/main)
+          if [[ ! -z "$diff_output" ]]; then echo "差分あり"; echo "DIFF_FOUND=true" >> "$GITHUB_ENV" fi
       - name: diff exists
         if: ${{ env.DIFF_FOUND != '' }}
         run: |
           echo "差分あり"
-          git status
-          git diff
+          branch=upstream-$(git rev-parse --short upstream/main)
+          git checkout -b ${branch} upstream/main
+          git push origin ${branch}
       - name: no diff
         if: ${{ env.DIFF_FOUND == '' }}
         run: |
           echo "差分なし"
-          git status
-          git diff

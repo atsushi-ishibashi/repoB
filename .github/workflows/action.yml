@@ -8,24 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Pull&Merge upstream
         env:
           REPO_FORK: https://github.com/atsushi-ishibashi/repoA.git
         run: |
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          git config --global pull.rebase merges
-
-          git pull --unshallow
-
           git remote add upstream ${REPO_FORK}
-
           git fetch upstream
-
-          git checkout main
-          git merge --no-edit upstream/main
-          git diff
-          git diff --quiet
+          git log origin/main..upstream/main
+          echo $?
           echo "DIFF_FOUND=$?" >> $GITHUB_ENV
       - name: diff exists
         if: env.DIFF_FOUND != 0

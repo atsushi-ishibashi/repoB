@@ -19,7 +19,7 @@ jobs:
           git remote add upstream ${REPO_FORK}
           git fetch upstream
           diff_output=$(git log origin/main..upstream/main)
-          if [[ ! -z "$diff_output" ]]; then echo "差分あり"; echo "DIFF_FOUND=true" >> "$GITHUB_ENV" fi
+          if [[ ! -z "$diff_output" ]]; then echo "差分あり"; echo "DIFF_FOUND=true" >> "$GITHUB_ENV"; fi
       - name: diff exists
         if: ${{ env.DIFF_FOUND != '' }}
         run: |

@@ -24,13 +24,18 @@ jobs:
 
           git checkout main
           git merge --no-edit upstream/main
+          git diff
           git diff --quiet
           echo "DIFF_FOUND=$?" >> $GITHUB_ENV
       - name: diff exists
         if: env.DIFF_FOUND != 0
         run: |
           echo "差分あり"
+          git status
+          git diff
       - name: no diff
         if: env.DIFF_FOUND == 0
         run: |
           echo "差分なし"
+          git status
+          git diff

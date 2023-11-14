@@ -31,7 +31,6 @@ jobs:
           echo "差分あり"
           branch=upstream-$(git rev-parse --short upstream/main)
           git checkout -b ${branch} upstream/main
-          git push origin ${branch}
           gh pr create --draft --title 'Sync to upstream' --body 'Created by Github action'
       - name: no diff
         if: ${{ env.DIFF_FOUND == '' }}

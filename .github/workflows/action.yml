@@ -7,9 +7,8 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     permissions:
-      write-all
-      # contents: write
-      # pull-requests: write
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,7 +26,7 @@ jobs:
       - name: create pull request
         if: ${{ env.DIFF_FOUND != '' }}
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.HOGEHOGE }}
         run: |
           echo "差分あり"
           branch=upstream-$(git rev-parse --short upstream/main)

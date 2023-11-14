@@ -28,12 +28,13 @@ jobs:
         if: ${{ env.DIFF_FOUND != '' }}
         env:
           GH_TOKEN: ${{ github.token }}
+          AUTHOR: ${{ github.event.pusher.name }}
         run: |
           echo "差分あり"
           branch=upstream-$(git rev-parse --short upstream/main)
           git checkout -b ${branch} upstream/main
           git push origin ${branch}
-          gh pr create -B main -H ${branch} --title 'Sync to upstream' --body 'Created by Github action'
+          gh pr create --draft -B main -H ${branch} --title 'Sync to upstream' --body 'Created by Github action' --assignee $AUTHOR
       - name: no diff
         if: ${{ env.DIFF_FOUND == '' }}
         run: |

@@ -32,7 +32,7 @@ jobs:
           branch=upstream-$(git rev-parse --short upstream/main)
           git checkout -b ${branch} upstream/main
           git push origin ${branch}
-          gh pr create --draft --base main --head ${branch} --fill
+          gh pr create --draft --base origin/main --head ${branch} --fill
       - name: no diff
         if: ${{ env.DIFF_FOUND == '' }}
         run: |

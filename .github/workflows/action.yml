@@ -23,13 +23,14 @@ jobs:
           git fetch upstream
           diff_output=$(git log origin/main..upstream/main)
           if [[ ! -z "$diff_output" ]]; then echo "差分あり"; echo "DIFF_FOUND=true" >> "$GITHUB_ENV"; fi
-      - name: diff exists
+      - name: create pull request
         if: ${{ env.DIFF_FOUND != '' }}
         run: |
           echo "差分あり"
           branch=upstream-$(git rev-parse --short upstream/main)
           git checkout -b ${branch} upstream/main
           git push origin ${branch}
+          gh pr create -B main -H ${branch} --title 'Sync to upstream' --body 'Created by Github action'
       - name: no diff
         if: ${{ env.DIFF_FOUND == '' }}
         run: |
